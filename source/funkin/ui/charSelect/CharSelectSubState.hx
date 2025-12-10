@@ -873,11 +873,14 @@ class CharSelectSubState extends MusicBeatSubState
             onComplete: (_) -> {
               if (playerChill.getCurrentAnimation() == "deselect loop start" || playerChill.getCurrentAnimation() == "deselect")
               {
-                playerChill.anim.play("idle", true);
-                playerChill.anim.curAnim.looped = true;
-                gfChill.anim.play("idle", true);
-                gfChill.anim.curAnim.looped = true;
+                if (playerChill.getCurrentAnimation() != null)
+                {
+                  playerChill.anim.play("idle", true);
+                  if (playerChill.getCurrentAnimation() != null) playerChill.anim.curAnim.looped = true;
+                }
               }
+              gfChill.anim.play("idle", true);
+              gfChill.anim.curAnim.looped = true;
             }
           });
         selectTimer.cancel();
@@ -1161,10 +1164,22 @@ class CharSelectSubState extends MusicBeatSubState
     dispatchEvent(new CharacterSelectScriptEvent(CHARACTER_SELECTED, value));
 
     nametag.switchChar(value);
-    gfChill.visible = false;
-    playerChill.visible = false;
     playerChillOut.visible = true;
     playerChillOut.anim.play("slideout");
+
+    if (playerChillOut.getCurrentAnimation() == null || playerChillOut.getCurrentAnimation() != "slideout")
+    {
+      playerChill.switchChar(value);
+      playerChill.visible = true;
+
+      gfChill.switchGF(value);
+      gfChill.visible = true;
+
+      playerChillOut.visible = false;
+      return value;
+    }
+
+    playerChill.visible = false;
 
     playerChillOut.anim.onFrameChange.removeAll();
     playerChillOut.anim.onFrameChange.add(function(animName:String, frameNumber:Int, index:Int) {
