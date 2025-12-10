@@ -873,11 +873,8 @@ class CharSelectSubState extends MusicBeatSubState
             onComplete: (_) -> {
               if (playerChill.getCurrentAnimation() == "deselect loop start" || playerChill.getCurrentAnimation() == "deselect")
               {
-                if (playerChill.getCurrentAnimation() != null)
-                {
-                  playerChill.anim.play("idle", true);
-                  if (playerChill.getCurrentAnimation() != null) playerChill.anim.curAnim.looped = true;
-                }
+                playerChill.anim.play("idle", true);
+                playerChill.anim.curAnim.looped = true;
               }
               gfChill.anim.play("idle", true);
               gfChill.anim.curAnim.looped = true;
